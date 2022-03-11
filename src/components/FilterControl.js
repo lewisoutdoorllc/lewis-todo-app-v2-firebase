@@ -1,7 +1,7 @@
 import React from 'react'
 
 export const FilterControl = ({ filterStatus, setFilterStatus }) => {
-  console.log(filterStatus)
+  // console.log(filterStatus)
 
   const handleStatus = (status) => {
     setFilterStatus(status)

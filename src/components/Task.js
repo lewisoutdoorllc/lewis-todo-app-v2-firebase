@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Check from '../images/icon-check.svg'
 import { setDoc, doc } from 'firebase/firestore'
+import db from '../utils/firebase'
 
 /* Task TODOS
 How do we UPDATE a task status to true OR false (backend)?
@@ -11,9 +12,7 @@ How do we UPDATE a task status to true OR false (backend)?
 - setDoc will UPDATE a document to whatever the payload is.
 */
 
-
-
-export const Task = ({ text, task, tasks, setTasks }) => {
+export const Task = ({ text, task, tasks, setTasks, filteredTasks }) => {
 
   // Create a state variable to keep track of mutable task
   const [mutableTask, setMutableTask] = useState(task)
@@ -21,18 +20,12 @@ export const Task = ({ text, task, tasks, setTasks }) => {
   const checked = mutableTask.status ? "checked" : "";
   const checkIcon = mutableTask.status ? (<img src={Check} alt="completed" />) : "";
 
-
   const markCompleted = () => {
-    console.log(tasks)
-    // This updates the status on our FrontEnd
     setMutableTask({ ...mutableTask, status: !mutableTask.status })
 
-    // This will update the statuses in my BACKEND
-    const updatedTasks = tasks.map((item) => {
-      // find the corresponding item that matches task
-      return task.id === item.id ? { ...item, status: !item.status } : item
-    })
-    setTasks(updatedTasks)
+    const docRef = doc(db, 'tasks', mutableTask.id)
+    const payload = { text: task.text, id: task.id, status: !mutableTask.status }
+    setDoc(docRef, payload)
   }
 
   return (

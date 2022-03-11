@@ -1,9 +1,11 @@
 import React from 'react'
 import { FilterControl } from './FilterControl'
 import { Task } from './Task'
+import { deleteDoc, doc } from 'firebase/firestore'
+import db from '../utils/firebase'
 
 /* TASKLIST TODOS
-How do we DELETE a collection from our Firestore db?
+Need to DELETE a collection from our Firestore db?
 
 - import deleteDoc, and doc from 'firebase/firestore'
 - import db from '../utils/firebase'
@@ -11,25 +13,24 @@ How do we DELETE a collection from our Firestore db?
 - deleteDoc(docRef, id) 
 */
 
-
 export const TaskList = ({ tasks, setTasks, filterStatus, setFilterStatus, filteredTasks }) => {
 
   const clearCompleted = () => {
-    //Clear's Tasks by filtering out
-    setTasks(tasks.filter((task) => !task.status))
-    //With Firebase we can delete a document
-
-
-    // Reset the filterStatus to all
-    setFilterStatus("all")
+    //Clear's Tasks by deleting from Firestore
+    filteredTasks.forEach((task) => {
+      if (task.status === true) {
+        deleteDoc(doc(db, 'tasks', task.id))
+        // console.log(filteredTasks)
+      }
+    })
   }
 
   return (
 
     <div className='task-list-wrapper'>
+      {/* TASKLIST */}
       <div className='task-list'>
         {filteredTasks.map((task) => {
-
           return <Task
             text={task.text}
             status={task.staus}
@@ -37,11 +38,11 @@ export const TaskList = ({ tasks, setTasks, filterStatus, setFilterStatus, filte
             setTasks={setTasks}
             task={task}
             key={task.id}
+            filteredTasks={filteredTasks}
           />
         })}
-
       </div>
-
+      {/* TASKLIST ITEMS LEFT COUNTER */}
       <div className='task-items-info'>
         <div className='items-left'>
           5 items left
@@ -51,14 +52,11 @@ export const TaskList = ({ tasks, setTasks, filterStatus, setFilterStatus, filte
           filterStatus={filterStatus}
           setFilterStatus={setFilterStatus}
         />
-
+        {/* CLEAR THE COMPLETED TASKS */}
         <div className='items-clear'>
           <span onClick={clearCompleted}>Clear Completed</span>
         </div>
       </div>
-
     </div>
-
-
   )
 }

@@ -3,18 +3,16 @@ import { addDoc, collection } from 'firebase/firestore'
 import db from '../utils/firebase'
 
 /* TASKINPUT TODOS
-How do we ADD a document(task) to Firestore?
+Need to ADD a document(task) to Firestore?
 
 - import addDoc and collection from firebase/firestore
 - import db from ../utils/firebase.js
 - make handleForm async/await
 - await addDoc()
 - Pass collectionRef and payload to addDoc()
-
-
 */
 
-export const TaskInput = ({ tasks, setTasks }) => {
+export const TaskInput = () => {
 
     const [input, setInput] = useState("")
 
@@ -22,40 +20,11 @@ export const TaskInput = ({ tasks, setTasks }) => {
         setInput(e.target.value)
     }
 
-    // const handleForm = (e) => {
-    //     e.preventDefault()
-
-    //     const generateId = (array) => {
-    //         // This variable should hold an array of all the ids
-    //         const taskIDs = array.map((item) => item.id)
-
-    //         console.log(taskIDs)
-    //         return Math.max(...taskIDs) + 1
-    //     }
-
-    //     // Create a new todo object
-    //     const newTask = {
-    //         id: generateId(tasks),
-    //         text: input,
-    //         status: false
-    //     }
-
-
-
-    //     // How do I add a new task to the list
-
-
-
-
-    //     setTasks([newTask, ...tasks])
-    // }
-
     const handleForm = async (e) => {
         e.preventDefault()
         // How do I add a new task to the list
         if (input) {
             const collectionRef = collection(db, 'tasks')
-            // await addDoc(collectionRef, payload)
 
             const payload = {
                 text: input.trim(),
@@ -64,13 +33,8 @@ export const TaskInput = ({ tasks, setTasks }) => {
 
             await addDoc(collectionRef, payload)
             setInput("")
-
         }
-        // setTasks([newTask, ...tasks])
     }
-
-
-
 
     return (
         <div className='task-input'>
