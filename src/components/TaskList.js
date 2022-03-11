@@ -23,6 +23,7 @@ export const TaskList = ({ tasks, setTasks, filterStatus, setFilterStatus, filte
         // console.log(filteredTasks)
       }
     })
+    setFilterStatus('all')
   }
 
   return (
