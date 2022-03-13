@@ -12,7 +12,10 @@ export const Dashboard = () => {
     const [filterStatus, setFilterStatus] = useState("all")
 
     useEffect(() => {
-        const unsub = onSnapshot(collection(db, "tasks"), (snapshot) => {
+        // maybe doc not collection
+        const unsub = onSnapshot(collection(db, "users"), (snapshot) => {
+        // const unsub = onSnapshot(collection(db, "tasks"), (snapshot) => {
+            
             let todos = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
             setFilteredTasks(todos)
             const handleFilter = () => {

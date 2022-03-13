@@ -34,7 +34,7 @@ export const TaskList = ({ tasks, setTasks, filterStatus, setFilterStatus, filte
         {filteredTasks.map((task) => {
           return <Task
             text={task.text}
-            status={task.staus}
+            status={task.status}
             tasks={tasks}
             setTasks={setTasks}
             task={task}
