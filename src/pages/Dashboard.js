@@ -13,9 +13,10 @@ export const Dashboard = () => {
 
     useEffect(() => {
         // maybe doc not collection
-        const unsub = onSnapshot(collection(db, "users"), (snapshot) => {
-        // const unsub = onSnapshot(collection(db, "tasks"), (snapshot) => {
-            
+        // const unsub = onSnapshot(collection(db, "users"), (snapshot) => {
+        const unsub = onSnapshot(collection(db, "tasks"), (snapshot) => {
+            // const unsub = onSnapshot(doc(db, 'users', `${user.task}`), (snapshot) => {
+
             let todos = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
             setFilteredTasks(todos)
             const handleFilter = () => {
