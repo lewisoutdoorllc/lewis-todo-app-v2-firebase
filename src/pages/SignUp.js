@@ -1,22 +1,35 @@
 import React, { useRef } from 'react'
 import { Login } from '../components/Login'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth, signInWithGooglePopup, createUserDocumentFromAuth } from '../utils/firebase'
+import {
+    createUserWithEmailAndPassword,
+    // getRedirectResult, 
+} from 'firebase/auth'
+import {
+    auth,
+    signInWithGooglePopup,
+    createUserDocumentFromAuth,
+    // signInWithGoggleRedirect,
+} from '../utils/firebase'
 import { setDoc, doc } from 'firebase/firestore'
 import db from '../utils/firebase'
 
 export const SignUp = () => {
+    // LOGIN WITH GOOGLE USING REDIRECT
+    // useEffect(async () => {
+    //     const response = await getRedirectResult(auth)
+    //     if (response) {
+    //         const userDocRef = await createUserDocumentFromAuth(response.user)
+    //     }
+    // }, [])
+    // LOGIN WITH GOOGLE USING POPUP
     const logGoogleUser = async () => {
         const { user } = await signInWithGooglePopup();
         const userDocRef = await createUserDocumentFromAuth(user)
+        window.location = "/dashboard"
     }
+
     const emailRef = useRef()
     const passwordRef = useRef()
-    // console.log(useRef())
-    // console.log(emailRef)
-    // console.log(passwordRef)
-    // const confirmPasswordRef = useRef()
-    // console.log(emailRef.current.value)
 
     const register = async () => {
         try {
@@ -58,8 +71,10 @@ export const SignUp = () => {
                 emailInput={emailRef}
                 passwordInput={passwordRef}
                 btnFunction={register}
-                button2="Sign In With Google"
+                button2="Sign Up With Google"
                 btnFunctionGoogle={logGoogleUser}
+                // button3="Sign Up With Redirect"
+            // btnFunctionGoogleRedirect={signInWithGoggleRedirect}
             />
         </div>
     )

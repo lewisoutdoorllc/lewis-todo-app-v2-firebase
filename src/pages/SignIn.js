@@ -1,8 +1,17 @@
 import React, { useRef } from 'react'
 import { Login } from '../components/Login'
-import { auth } from '../utils/firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import {
+    auth,
+    signInWithGooglePopup,
+    createUserDocumentFromAuth,
+} from '../utils/firebase'
 // import { signInWithGooglePopup } from '../utils/firebase'
+
+const logGoogleUser = async () => {
+    const { user } = await signInWithGooglePopup();
+    const userDocRef = await createUserDocumentFromAuth(user)
+}
 
 
 export const SignIn = () => {
@@ -36,6 +45,8 @@ export const SignIn = () => {
                 emailInput={emailRef}
                 passwordInput={passwordRef}
                 btnFunction={login}
+                button2="Sign In With Google"
+                btnFunctionGoogle={logGoogleUser}
             />
         </div>
     )
