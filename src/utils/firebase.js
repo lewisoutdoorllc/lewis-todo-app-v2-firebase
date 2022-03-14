@@ -1,6 +1,11 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+} from "firebase/firestore";
 import {
     getAuth,
     signInWithRedirect,
@@ -35,6 +40,36 @@ provider.setCustomParameters({
 export const auth = getAuth(app);
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 export default db;
+
+export const createUserDocumentFromAuth = async (userAuth) => {
+    // CREATES A NEW USER AND DOCUMENT IN USERS COLLECTION
+    const userDocRef = doc(db, 'users', `${userAuth.uid}`);
+    console.log(userDocRef);
+    // GET DOCUMENT SNAPSHOT FROM USERS COLLECTION
+    const userSnapshot = await getDoc(userDocRef);
+    console.log(userSnapshot);
+    console.log(userSnapshot.exists());
+    // IF USER DATA DOES NOT EXIST, CREATE A NEW USER AND DOCUMENT
+    if (!userSnapshot.exists()) {
+        const { email, displayName } = userAuth;
+        const createdAt = new Date();
+
+        try {
+            await setDoc(userDocRef, {
+                email,
+                displayName,
+                createdAt,
+            })
+        }
+        catch (error) {
+            console.log('Error Creating User', error.message);
+            // alert(error.message)
+        }
+        // IF USER DATA DOES EXIST, RETURN USER DATA
+        return userDocRef;
+    }
+}
+
 
 
 

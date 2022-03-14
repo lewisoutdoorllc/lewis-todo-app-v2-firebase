@@ -1,14 +1,14 @@
 import React, { useRef } from 'react'
 import { Login } from '../components/Login'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth, signInWithGooglePopup } from '../utils/firebase'
+import { auth, signInWithGooglePopup, createUserDocumentFromAuth } from '../utils/firebase'
 import { setDoc, doc } from 'firebase/firestore'
 import db from '../utils/firebase'
 
 export const SignUp = () => {
     const logGoogleUser = async () => {
-        const response = await signInWithGooglePopup();
-        console.log(response)
+        const { user } = await signInWithGooglePopup();
+        const userDocRef = await createUserDocumentFromAuth(user)
     }
     const emailRef = useRef()
     const passwordRef = useRef()
