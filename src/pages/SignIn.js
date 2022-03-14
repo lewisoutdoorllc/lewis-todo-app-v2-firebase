@@ -2,9 +2,11 @@ import React, { useRef } from 'react'
 import { Login } from '../components/Login'
 import { auth } from '../utils/firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+// import { signInWithGooglePopup } from '../utils/firebase'
 
 
 export const SignIn = () => {
+
     const emailRef = useRef()
     const passwordRef = useRef()
 
