@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore'
+import { doc, setDoc } from 'firebase/firestore'
 import db from '../utils/firebase'
 
 /* TASKINPUT TODOS
@@ -12,48 +12,46 @@ Need to ADD a document(task) to Firestore?
 - Pass collectionRef and payload to addDoc()
 */
 
-export const TaskInput = (task, setTasks, userId, filteredTasks) => {
+export const TaskInput = ({ userId, filteredTasks }) => {
 
     const [input, setInput] = useState("")
 
     const handleChange = (e) => {
         setInput(e.target.value)
     }
-
+    //  ===== GENERATE ID FOR NEW TASKS MADE BY USER =====  
     const generateId = (array) => {
-        // This variable should hold an array of all the ids
+        //  ===== NEW ARRAY THAT HOLDS ONLY THE IDS OF THE USERS TASK =====
         const taskIDs = array.map((item) => item.id)
-
-        console.log(taskIDs)
-        if(taskIDs.length === 0) {
+        // console.log(taskIDs)
+        if (taskIDs.length === 0) {
             return 0
         } else {
-            // This variable should hold the highest id
-            let maxId = Math.max(...taskIDs)
-            return maxId + 1
+            //  ===== GETS OUR MAX ID AND ADDS 1 TO MAKE THE NEW TASKS THE HIGEST VAL =====
+            return Math.max(...taskIDs) + 1
+            // let maxId = Math.max(...taskIDs)
+            // return maxId + 1
         }
-        // return Math.max(...taskIDs) + 1
     }
 
     const handleForm = async (e) => {
         e.preventDefault()
-        // How do I add a new task to the list
+        //  ===== ADDS NEW TASK TO FIREBASE AND UPDATES USER'S TASKS =====
         if (input) {
             const newTask = {
                 text: input.trim(),
                 status: false,
                 id: generateId(filteredTasks)
             }
-            filteredTasks.push(newTask)
+            //  ===== PUSHES NEW TASK TO USER'S TASKS =====
             let taskRef = filteredTasks
-
             taskRef.push(newTask)
 
             const payload = {
                 tasks: taskRef
             }
-            setDoc(doc(db, 'users', {}), payload)
-            // THIS RESETS THE INPUT FIELD AFTER ENTERING A TASK
+            setDoc(doc(db, "users", userId), payload)
+            //  ===== THIS RESETS THE INPUT FIELD AFTER ENTERING A TASK =====
             setInput("")
         }
     }

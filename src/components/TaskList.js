@@ -4,22 +4,13 @@ import { Task } from './Task'
 import { deleteDoc, doc } from 'firebase/firestore'
 import db from '../utils/firebase'
 
-/* TASKLIST TODOS
-Need to DELETE a collection from our Firestore db?
-
-- import deleteDoc, and doc from 'firebase/firestore'
-- import db from '../utils/firebase'
-- use deleteDoc in clearCompleted
-- deleteDoc(docRef, id) 
-*/
-
-export const TaskList = ({ tasks, setTasks, filterStatus, setFilterStatus, filteredTasks }) => {
+export const TaskList = ({ tasks, setTasks, filterStatus, setFilterStatus, filteredTasks, userId }) => {
 
   const clearCompleted = () => {
     //Clear's Tasks by deleting from Firestore
     filteredTasks.forEach((task) => {
       if (task.status === true) {
-        deleteDoc(doc(db, 'tasks', task.id))
+        deleteDoc(doc(db, "tasks", task.id))
         // console.log(filteredTasks)
       }
     })
@@ -40,6 +31,7 @@ export const TaskList = ({ tasks, setTasks, filterStatus, setFilterStatus, filte
             task={task}
             key={task.id}
             filteredTasks={filteredTasks}
+            userId={userId}
           />
         })}
       </div>
