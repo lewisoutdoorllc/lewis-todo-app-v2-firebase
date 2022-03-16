@@ -1,21 +1,24 @@
 import React from 'react'
 import { FilterControl } from './FilterControl'
 import { Task } from './Task'
-import { deleteDoc, doc } from 'firebase/firestore'
+import { doc, setDoc } from 'firebase/firestore'
 import db from '../utils/firebase'
 
 export const TaskList = ({ tasks, setTasks, filterStatus, setFilterStatus, filteredTasks, userId }) => {
 
+  // =====  DELETE TASK FROM FIREBASE  =====
+  // ===== CLEAR TASK WITH THE STATUS OF TRUE OR IN OTHER WORDS COMPLETED =====
   const clearCompleted = () => {
-    //Clear's Tasks by deleting from Firestore
-    filteredTasks.forEach((task) => {
-      if (task.status === true) {
-        deleteDoc(doc(db, "tasks", task.id))
-        // console.log(filteredTasks)
-      }
-    })
-    setFilterStatus('all')
+    const docRef = doc(db, "users", userId)
+    let arrayRef = filteredTasks.filter((item) => item.status === false)
+    const payload = {
+      tasks: arrayRef
+    }
+    // ====  UPDATES THE DOCUMENT IN FIREBASE  ====
+    setDoc(docRef, payload)
   }
+
+  let itemsLeft = filteredTasks.length
 
   return (
 
@@ -38,7 +41,7 @@ export const TaskList = ({ tasks, setTasks, filterStatus, setFilterStatus, filte
       {/* TASKLIST ITEMS LEFT COUNTER */}
       <div className='task-items-info'>
         <div className='items-left'>
-          5 items left
+          {itemsLeft} items left
         </div>
 
         <FilterControl
