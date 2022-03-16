@@ -1,18 +1,12 @@
 import React, { useRef } from 'react'
 import { Login } from '../components/Login'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import {
-    auth,
-    signInWithGooglePopup,
-    createUserDocumentFromAuth,
-} from '../utils/firebase'
-// import { signInWithGooglePopup } from '../utils/firebase'
+import { auth, signInWithGooglePopup, createUserDocumentFromAuth } from '../utils/firebase'
 
 const logGoogleUser = async () => {
     const { user } = await signInWithGooglePopup();
     const userDocRef = await createUserDocumentFromAuth(user)
 }
-
 
 export const SignIn = () => {
 
@@ -27,7 +21,6 @@ export const SignIn = () => {
                         window.location = "/dashboard"
                     }
                 })
-            // window.location = "/dashboard"
         }
         catch (error) {
             alert(error.message)

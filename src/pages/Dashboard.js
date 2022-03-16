@@ -5,18 +5,13 @@ import { useState, useEffect } from 'react'
 import { onSnapshot, collection } from 'firebase/firestore';
 import db from '../utils/firebase';
 
-
 export const Dashboard = () => {
     const [tasks, setTasks] = useState([])
     const [filteredTasks, setFilteredTasks] = useState(tasks)
     const [filterStatus, setFilterStatus] = useState("all")
 
     useEffect(() => {
-        // maybe doc not collection
-        // const unsub = onSnapshot(collection(db, "users"), (snapshot) => {
         const unsub = onSnapshot(collection(db, "tasks"), (snapshot) => {
-            // const unsub = onSnapshot(doc(db, 'users', `${user.task}`), (snapshot) => {
-
             let todos = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
             setFilteredTasks(todos)
             const handleFilter = () => {
@@ -30,15 +25,12 @@ export const Dashboard = () => {
                     setFilteredTasks(todos)
                 }
             }
-
             handleFilter()
         })
-
         // Clean up function when the component unmounts remove the sideEffect
         return unsub
 
     }, [filterStatus])
-
 
     return (
         <div className="Dashboard">
