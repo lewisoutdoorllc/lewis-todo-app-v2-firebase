@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore'
 import db from '../utils/firebase'
 
 /* TASKINPUT TODOS
@@ -12,7 +12,7 @@ Need to ADD a document(task) to Firestore?
 - Pass collectionRef and payload to addDoc()
 */
 
-export const TaskInput = () => {
+export const TaskInput = (task, setTasks, userId, filteredTasks) => {
 
     const [input, setInput] = useState("")
 
@@ -20,18 +20,40 @@ export const TaskInput = () => {
         setInput(e.target.value)
     }
 
+    const generateId = (array) => {
+        // This variable should hold an array of all the ids
+        const taskIDs = array.map((item) => item.id)
+
+        console.log(taskIDs)
+        if(taskIDs.length === 0) {
+            return 0
+        } else {
+            // This variable should hold the highest id
+            let maxId = Math.max(...taskIDs)
+            return maxId + 1
+        }
+        // return Math.max(...taskIDs) + 1
+    }
+
     const handleForm = async (e) => {
         e.preventDefault()
         // How do I add a new task to the list
         if (input) {
-            const collectionRef = collection(db, 'tasks')
+            const newTask = {
+                text: input.trim(),
+                status: false,
+                id: generateId(filteredTasks)
+            }
+            filteredTasks.push(newTask)
+            let taskRef = filteredTasks
+
+            taskRef.push(newTask)
 
             const payload = {
-                text: input.trim(),
-                status: false
+                tasks: taskRef
             }
-
-            await addDoc(collectionRef, payload)
+            setDoc(doc(db, 'users', {}), payload)
+            // THIS RESETS THE INPUT FIELD AFTER ENTERING A TASK
             setInput("")
         }
     }

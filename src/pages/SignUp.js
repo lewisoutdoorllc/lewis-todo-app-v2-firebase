@@ -24,16 +24,9 @@ export const SignUp = () => {
             await createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
                 .then(async (response) => {
                     // CREATES A NEW USER AND DOCUMENT
-                    await setDoc(doc(db, 'users', `${response.user.uid}`), {
-                        email: emailRef.current.value,
-                        password: passwordRef.current.value,
-                        uid: response.user.uid,
-                        task: [
-                            {
-                                text: '',
-                                status: false
-                            }
-                        ],
+                    await setDoc(doc(db, 'users', `${response.user.uid}`), 
+                    {
+                        tasks: []
                     })
                     if (response) {
                         window.location = "/dashboard"

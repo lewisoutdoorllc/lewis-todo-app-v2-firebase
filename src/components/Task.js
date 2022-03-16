@@ -28,6 +28,8 @@ export const Task = ({ text, task, tasks, setTasks, filteredTasks }) => {
     setDoc(docRef, payload)
   }
 
+  // const docRef = (doc(db, 'users', userId))
+
   return (
     <div className='task-item'>
       <div className='check' onClick={markCompleted}>
